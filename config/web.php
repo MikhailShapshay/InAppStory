@@ -42,15 +42,19 @@ $config = [
             ],
         ],
         'db' => $db,
-        /*
-        'urlManager' => [
-            'enablePrettyUrl' => true,
-            'showScriptName' => false,
-            'rules' => [
-            ],
-        ],
-        */
+				'urlManager' => [
+					'enablePrettyUrl' => true,
+					'showScriptName' => false,
+					'rules' => [
+						['class' => 'yii\rest\UrlRule', 'controller' => 'v1/promo-code'],
+					],
+				],
     ],
+		'modules' => [
+			'v1' => [
+				'class' => 'app\modules\v1\Module',
+			],
+		],
     'params' => $params,
 ];
 
