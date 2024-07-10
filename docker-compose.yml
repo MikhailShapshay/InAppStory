@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  nginx:
+    image: nginx:latest
+    ports:
+      - "8282:80"
+    volumes:
+      - ./:/var/www/html/
+      - ./_docker/nginx/conf.d/:/etc/nginx/conf.d/
+    depends_on:
+      - app
+    networks:
+        - yii2
+    container_name: app_nginx
+
+  app:
+    build:
+        context: .
+        dockerfile: _docker/app/Dockerfile
+    volumes:
+      - ./:/var/www/html/
+    depends_on:
+        - mysqldb
+    networks:
+        - yii2
+    container_name: app
+
+  mysqldb:
+    image: mysql:latest
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=yii2_db
+      - MYSQL_USER=yii2_u
+      - MYSQL_PASSWORD=secret
+      - TZ=Europe/Moscow
+    volumes:
+      - ./_docker/mysql/my.cnf:/etc/mysql/my.cnf
+      - ./_docker/mysql_data/:/var/lib/mysql/
+    ports:
+        - "8101:3306"
+    networks:
+        - yii2
+    container_name: app_db
+
+networks:
+  yii2:
+    driver: bridge
