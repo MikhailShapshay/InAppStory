@@ -2,8 +2,10 @@
 
 namespace app\controllers;
 
+use Faker\Factory;
 use Yii;
 use app\models\User;
+use yii\base\Security;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -23,16 +25,50 @@ class UserController extends Controller
 		];
 	}
 
-	public function actionIndex()
-	{
-		$dataProvider = new ActiveDataProvider([
-			'query' => User::find(),
-		]);
+    public function actionGenerateUsers()
+    {
+        $faker = Factory::create('ru_RU');
 
-		return $this->render('index', [
-			'dataProvider' => $dataProvider,
-		]);
-	}
+        $security = new Security();
+
+        // Определим количество итераций для генерации
+        $iterations = 2;
+        $batchSize = 25;
+
+        for ($i = 0; $i < $iterations; $i++) {
+            $users = [];
+            for ($j = 0; $j < $batchSize; $j++) {
+                $users[] = [
+                    $faker->name,
+                    $security->generateRandomString(),
+                    $security->generatePasswordHash('user'),
+                    $faker->email,
+                    time(),
+                    time(),
+                ];
+            }
+            Yii::$app->db->createCommand()->batchInsert('user', ['username', 'auth_key', 'password_hash', 'email', 'created_at', 'updated_at'], $users)->execute();
+            unset($users);
+        }
+
+        Yii::$app->session->setFlash('success', 'Users data generation is complete!');
+
+        return $this->redirect(['index']);
+    }
+
+    public function actionIndex()
+    {
+        $dataProvider = new ActiveDataProvider([
+            'query' => User::find(),
+            'pagination' => [
+                'pageSize' => 25, // Количество строк на странице
+            ],
+        ]);
+
+        return $this->render('index', [
+            'dataProvider' => $dataProvider,
+        ]);
+    }
 
 	public function actionView($id)
 	{
@@ -41,31 +77,35 @@ class UserController extends Controller
 		]);
 	}
 
-	public function actionCreate()
-	{
-		$model = new User();
+    public function actionCreate()
+    {
+        $model = new User();
+        $model->scenario = 'create';
 
-		if ($model->load(Yii::$app->request->post()) && $model->save()) {
-			return $this->redirect(['view', 'id' => $model->id]);
-		}
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+        }
 
-		return $this->render('create', [
-			'model' => $model,
-		]);
-	}
+        return $this->render('create', [
+            'model' => $model,
+        ]);
+    }
 
-	public function actionUpdate($id)
-	{
-		$model = $this->findModel($id);
+    public function actionUpdate($id)
+    {
+        $model = $this->findModel($id);
+        $model->scenario = 'update'; // Установка сценария
 
-		if ($model->load(Yii::$app->request->post()) && $model->save()) {
-			return $this->redirect(['view', 'id' => $model->id]);
-		}
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
+        }
 
-		return $this->render('update', [
-			'model' => $model,
-		]);
-	}
+        return $this->render('update', [
+            'model' => $model,
+        ]);
+    }
 
 	public function actionDelete($id)
 	{
