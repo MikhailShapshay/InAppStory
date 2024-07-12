@@ -10,17 +10,19 @@ use Yii;
 
 class User extends ActiveRecord implements IdentityInterface
 {
-    public string $password; // Виртуальное свойство для хранения пароля
-
-    // Определение имени таблицы
-    private string $password_hash;
-    private string $auth_key;
-    private int $updated_at;
-    private int $created_at;
-    /**
-     * @var mixed|null
-     */
     private $id;
+    public string $password; // Виртуальное свойство для хранения пароля
+    //private string $password_hash;
+    //private string $auth_key;
+    //private int $created_at;
+    //private int $updated_at;
+
+    public function __construct($config = [])
+    {
+        parent::__construct($config);
+
+        $this->password = '';
+    }
 
     public static function tableName(): string
     {

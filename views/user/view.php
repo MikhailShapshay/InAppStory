@@ -10,7 +10,11 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="user-view">
 
 	<h1><?= Html::encode($this->title) ?></h1>
-
+    <?php if (Yii::$app->session->hasFlash('success')): ?>
+        <div class="alert alert-success">
+            <?= Yii::$app->session->getFlash('success') ?>
+        </div>
+    <?php endif; ?>
 	<p>
 		<?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
 		<?= Html::a('Delete', ['delete', 'id' => $model->id], [

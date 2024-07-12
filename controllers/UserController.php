@@ -79,11 +79,12 @@ class UserController extends Controller
 
     public function actionCreate()
     {
-        $model = new User();
-        $model->scenario = 'create';
+        $model = new User(['scenario' => 'create']);
 
-        if ($model->load(Yii::$app->request->post())) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $model->generateAuthKey(); // Генерируем auth_key перед сохранением
             if ($model->save()) {
+                Yii::$app->session->setFlash('success', 'User has been created successfully.');
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         }
