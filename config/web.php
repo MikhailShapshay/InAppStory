@@ -49,6 +49,8 @@ $config = [
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'v1/promo-code'],
                 'user/<action:\w+>/<id:\d+>' => 'user/<action>',
                 'user/<action:\w+>' => 'user/<action>',
+                'promo-code/<action:\w+>/<id:\d+>' => 'promo-code/<action>',
+                'promo-code/<action:\w+>' => 'promo-code/<action>',
             ],
         ],
     ],

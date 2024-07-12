@@ -22,10 +22,27 @@ AppAsset::register($this);
 
 <div class="wrap">
     <div class="container">
-        <p>
-            <?= Html::a('Users', ['user/index'], ['class' => 'btn btn-success']) ?>
-            <?= Html::a('Promocodes', ['site/index'], ['class' => 'btn btn-primary']) ?>
-        </p>
+        <div class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container">
+                <?= Html::a('Users', ['/user/index'], ['class' => 'navbar-brand']) ?>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <?= Html::a('Promo Codes', ['/promo-code/index'], ['class' => 'nav-link']) ?>
+                        </li>
+                        <li class="nav-item">
+                            <?= Html::a('About', ['/site/about'], ['class' => 'nav-link']) ?>
+                        </li>
+                        <!-- Добавьте другие пункты меню, если необходимо -->
+                    </ul>
+                </div>
+            </div>
+        </div>
 
         <?= $content ?>
     </div>
