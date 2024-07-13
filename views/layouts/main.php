@@ -1,58 +1,70 @@
 <?php
-use yii\helpers\Html;
-use yii\widgets\Breadcrumbs;
+
 use app\assets\AppAsset;
+use app\widgets\Alert;
+use yii\bootstrap5\Breadcrumbs;
+use yii\bootstrap5\Html;
+use yii\bootstrap5\Nav;
+use yii\bootstrap5\NavBar;
 
 AppAsset::register($this);
+
+$this->registerCsrfMetaTags();
+$this->registerMetaTag(['charset' => Yii::$app->charset], 'charset');
+$this->registerMetaTag(['name' => 'viewport', 'content' => 'width=device-width, initial-scale=1, shrink-to-fit=no']);
+$this->registerMetaTag(['name' => 'description', 'content' => $this->params['meta_description'] ?? '']);
+$this->registerMetaTag(['name' => 'keywords', 'content' => $this->params['meta_keywords'] ?? '']);
+$this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii::getAlias('@web/favicon.ico')]);
 ?>
 
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
-<html lang="<?= Yii::$app->language ?>">
+<html lang="<?= Yii::$app->language ?>" class="h-100">
 <head>
-    <meta charset="<?= Yii::$app->charset ?>">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
 </head>
-<body>
+<body class="d-flex flex-column h-100">
 <?php $this->beginBody() ?>
 
-<div class="wrap">
+<header id="header">
+            <?php
+            NavBar::begin([
+                'brandLabel' => Yii::$app->name,
+                'brandUrl' => Yii::$app->homeUrl,
+                'options' => ['class' => 'navbar-expand-md navbar-dark bg-dark fixed-top']
+            ]);
+            echo Nav::widget([
+                'options' => ['class' => 'navbar-nav'],
+                'items' => [
+                    ['label' => 'Users', 'url' => ['/user/index']],
+                    ['label' => 'Promo Codes', 'url' => ['/promo-code/index']],
+                    ['label' => 'About', 'url' => ['/site/about']],
+                    Yii::$app->user->isGuest
+                        ? ['label' => 'Login', 'url' => ['/user/login']]
+                        : '<li class="nav-item">'
+                        . Html::beginForm(['/user/logout'])
+                        . Html::submitButton(
+                            'Logout (' . Yii::$app->user->identity->username . ')',
+                            ['class' => 'nav-link btn btn-link logout']
+                        )
+                        . Html::endForm()
+                        . '</li>'
+                ]
+            ]);
+            NavBar::end();
+            ?>
+</header>
+
+<main id="main" class="flex-shrink-0" role="main">
     <div class="container">
-        <div class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <div class="container">
-                <?= Html::a('Users', ['/user/index'], ['class' => 'navbar-brand']) ?>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav ml-auto">
-                        <li class="nav-item">
-                            <?= Html::a('Promo Codes', ['/promo-code/index'], ['class' => 'nav-link']) ?>
-                        </li>
-                        <li class="nav-item">
-                            <?= Html::a('About', ['/site/about'], ['class' => 'nav-link']) ?>
-                        </li>
-                        <!-- Добавьте другие пункты меню, если необходимо -->
-                    </ul>
-                </div>
-            </div>
-        </div>
-
+        <?php if (!empty($this->params['breadcrumbs'])): ?>
+            <?= Breadcrumbs::widget(['links' => $this->params['breadcrumbs']]) ?>
+        <?php endif ?>
+        <?= Alert::widget() ?>
         <?= $content ?>
     </div>
-</div>
-
-<footer class="footer">
-    <div class="container">
-        <p class="pull-left">&copy; My Company <?= date('Y') ?></p>
-    </div>
-</footer>
+</main>
 
 <?php $this->endBody() ?>
 </body>

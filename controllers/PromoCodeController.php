@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use yii\filters\AccessControl;
 use Faker\Factory;
 use Yii;
 use yii\web\Controller;
@@ -13,9 +14,19 @@ class PromoCodeController extends Controller
 {
     public function behaviors()
     {
-        $behaviors = parent::behaviors();
-
-        return $behaviors;
+        return [
+            'access' => [
+                'class' => AccessControl::class,
+                'only' => ['index', 'view', 'create', 'update', 'delete'],
+                'rules' => [
+                    [
+                        'actions' => ['index', 'view', 'create', 'update', 'delete'],
+                        'allow' => true,
+                        'roles' => ['@'], // только авторизованные пользователи
+                    ],
+                ],
+            ],
+        ];
     }
 
     // Действие для генерации промокодов

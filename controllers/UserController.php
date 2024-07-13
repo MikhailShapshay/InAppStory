@@ -2,6 +2,8 @@
 
 namespace app\controllers;
 
+use yii\filters\AccessControl;
+use app\models\LoginForm;
 use Faker\Factory;
 use Yii;
 use app\models\User;
@@ -9,21 +11,25 @@ use yii\base\Security;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 class UserController extends Controller
 {
-	public function behaviors()
-	{
-		return [
-			'verbs' => [
-				'class' => VerbFilter::class,
-				'actions' => [
-					'delete' => ['POST'],
-				],
-			],
-		];
-	}
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::class,
+                'only' => ['index', 'view', 'create', 'update', 'delete'],
+                'rules' => [
+                    [
+                        'actions' => ['index', 'view', 'create', 'update', 'delete'],
+                        'allow' => true,
+                        'roles' => ['@'], // только авторизованные пользователи
+                    ],
+                ],
+            ],
+        ];
+    }
 
     public function actionGenerateUsers()
     {
@@ -123,4 +129,24 @@ class UserController extends Controller
 
 		throw new NotFoundHttpException('The requested page does not exist.');
 	}
+
+    public function actionLogin()
+    {
+        $model = new LoginForm();
+
+        if ($model->load(Yii::$app->request->post()) && $model->login()) {
+            return $this->goBack();
+        }
+
+        $model->password = '';
+        return $this->render('login', [
+            'model' => $model,
+        ]);
+    }
+
+    public function actionLogout()
+    {
+        Yii::$app->user->logout();
+        return $this->goHome();
+    }
 }

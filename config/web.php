@@ -20,8 +20,9 @@ $config = [
             'class' => 'yii\caching\FileCache',
         ],
         'user' => [
-            'identityClass' => 'app\models\User',
-            'enableAutoLogin' => false,
+            'identityClass' => 'app\models\User', // класс модели пользователя
+            'enableAutoLogin' => false, // разрешение авто-входа
+            'loginUrl' => ['user/login'], // страница для входа
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',
