@@ -10,12 +10,7 @@ use Yii;
 
 class User extends ActiveRecord implements IdentityInterface
 {
-    private $id;
     public string $password; // Виртуальное свойство для хранения пароля
-    //private string $password_hash;
-    //private string $auth_key;
-    //private int $created_at;
-    //private int $updated_at;
 
     public function __construct($config = [])
     {
@@ -27,6 +22,25 @@ class User extends ActiveRecord implements IdentityInterface
     public static function tableName(): string
     {
         return 'user';
+    }
+
+    public function fields(): array
+    {
+        return [
+            'id',
+            'username',
+            'email',
+            'auth_key',
+            'created_at',
+            'updated_at',
+        ];
+    }
+
+    public function extraFields(): array
+    {
+        return [
+            'promo_code',
+        ];
     }
 
     // Правила валидации и метки атрибутов (если нужно)
@@ -55,9 +69,13 @@ class User extends ActiveRecord implements IdentityInterface
         ];
     }
 
+    public function getPromoCode(){
+        return $this->hasOne(PromoCode::class, ['user_id' => 'id']);
+    }
+
     public static function findIdentityByAccessToken($token, $type = null)
     {
-        return static::findOne(['api_key' => $token]);
+        return static::findOne(['auth_key' => $token]);
     }
 
     public static function findIdentity($id)

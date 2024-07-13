@@ -4,9 +4,7 @@ namespace app\controllers;
 
 use Faker\Factory;
 use Yii;
-use yii\base\Security;
 use yii\web\Controller;
-use yii\web\Response;
 use yii\data\ActiveDataProvider;
 use yii\web\NotFoundHttpException;
 use app\models\PromoCode;
@@ -16,7 +14,7 @@ class PromoCodeController extends Controller
     public function behaviors()
     {
         $behaviors = parent::behaviors();
-        // Добавьте поведение аутентификации, если необходимо
+
         return $behaviors;
     }
 
@@ -102,30 +100,6 @@ class PromoCodeController extends Controller
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
-    }
-
-    // Действие для получения доступного промокода
-    public function actionGet()
-    {
-        $transaction = Yii::$app->db->beginTransaction();
-        try {
-            $promoCode = PromoCode::findAvailablePromoCode();
-
-            if ($promoCode === null) {
-                throw new NotFoundHttpException('Нет доступных промокодов.');
-            }
-
-            $promoCode->markAsUsed();
-            $transaction->commit();
-
-            Yii::$app->session->setFlash('success', 'Промокод успешно получен.');
-
-            return $this->redirect(['index']);
-        } catch (\Throwable $e) {
-            $transaction->rollBack();
-            Yii::$app->session->setFlash('error', 'Не удалось получить промокод: ' . $e->getMessage());
-            return $this->redirect(['index']);
-        }
     }
 
     // Найти модель промокода по ID

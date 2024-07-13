@@ -41,9 +41,10 @@ class PromoCode extends ActiveRecord
     }
 
     // Пометить промокод как использованный
-    public function markAsUsed()
+    public function markAsUsed($user_id)
     {
         $this->is_used = true;
+        $this->user_id = $user_id;
         return $this->save(false); // Сохраняем без валидации
     }
 

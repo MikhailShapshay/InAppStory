@@ -43,10 +43,18 @@ $config = [
         'db' => $db,
         'urlManager' => [
             'enablePrettyUrl' => true,
+            'enableStrictParsing' => true,
             'showScriptName' => false,
             'rules' => [
-                '' => 'user/index', // Правило для корневого пути
-                ['class' => 'yii\rest\UrlRule', 'controller' => 'v1/promo-code'],
+                '' => 'user/index',
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'api/promo-code-rest',
+                    'extraPatterns' => [
+                        'GET get-promo-code' => 'get-promo-code',
+                    ],
+                    'pluralize' => false,
+                ],
                 'user/<action:\w+>/<id:\d+>' => 'user/<action>',
                 'user/<action:\w+>' => 'user/<action>',
                 'promo-code/<action:\w+>/<id:\d+>' => 'promo-code/<action>',
