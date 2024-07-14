@@ -5,7 +5,6 @@ namespace app\controllers\api;
 use Throwable;
 use Yii;
 use yii\filters\auth\CompositeAuth;
-use yii\filters\auth\HttpBasicAuth;
 use yii\filters\auth\HttpBearerAuth;
 use yii\filters\auth\QueryParamAuth;
 use yii\rest\ActiveController;

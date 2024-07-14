@@ -61,6 +61,7 @@ $config = [
                 'user/<action:\w+>' => 'user/<action>',
                 'promo-code/<action:\w+>/<id:\d+>' => 'promo-code/<action>',
                 'promo-code/<action:\w+>' => 'promo-code/<action>',
+                'site/<action:\w+>' => 'site/<action>',
             ],
         ],
     ],
