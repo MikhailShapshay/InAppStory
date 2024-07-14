@@ -7,13 +7,16 @@ use yii\base\Model;
 
 class LoginForm extends Model
 {
-    public $username;
-    public $password;
-    public $rememberMe = true;
+    public string $username = '';
+    public string $password = '';
+    public bool $rememberMe = true;
 
-    private $_user;
+    private ?User $_user = null;
 
-    public function rules()
+    /**
+     * @return array
+     */
+    public function rules(): array
     {
         return [
             [['username', 'password'], 'required'],
@@ -22,26 +25,37 @@ class LoginForm extends Model
         ];
     }
 
-    public function validatePassword($attribute, $params)
+    /**
+     * @param $attribute
+     * @param $params
+     * @return void
+     */
+    public function validatePassword($attribute, $params): void
     {
         if (!$this->hasErrors()) {
             $user = $this->getUser();
 
             if (!$user || !$user->validatePassword($this->password)) {
-                $this->addError($attribute, 'Incorrect username or password.');
+                $this->addError($attribute, 'Неверное имя пользователя или пароль.');
             }
         }
     }
 
-    public function login()
+    /**
+     * @return bool
+     */
+    public function login(): bool
     {
         if ($this->validate()) {
-            return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600*24*30 : 0);
+            return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600 * 24 * 30 : 0);
         }
         return false;
     }
 
-    protected function getUser()
+    /**
+     * @return User|null
+     */
+    protected function getUser(): ?User
     {
         if ($this->_user === null) {
             $this->_user = User::findByUsername($this->username);

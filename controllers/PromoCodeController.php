@@ -2,6 +2,9 @@
 
 namespace app\controllers;
 
+use Throwable;
+use yii\db\Exception;
+use yii\db\StaleObjectException;
 use yii\filters\AccessControl;
 use Faker\Factory;
 use Yii;
@@ -9,10 +12,14 @@ use yii\web\Controller;
 use yii\data\ActiveDataProvider;
 use yii\web\NotFoundHttpException;
 use app\models\PromoCode;
+use yii\web\Response;
 
 class PromoCodeController extends Controller
 {
-    public function behaviors()
+    /**
+     * @return array[]
+     */
+    public function behaviors(): array
     {
         return [
             'access' => [
@@ -29,14 +36,18 @@ class PromoCodeController extends Controller
         ];
     }
 
-    // Действие для генерации промокодов
-    public function actionGeneratePromoCodes()
+    /**
+     * Действие для генерации промокодов
+     *
+     * @return string|Response
+     * @throws Exception
+     */
+    public function actionGeneratePromoCodes(): string|Response
     {
         $faker = Factory::create();
 
-        // Определим количество итераций для генерации
-        $iterations = 2;
-        $batchSize = 25;
+        $iterations = 2; // Количество итераций для генерации
+        $batchSize = 25; // Количество записей за итерацию
 
         for ($i = 0; $i < $iterations; $i++) {
             $promoCodes = [];
@@ -53,8 +64,12 @@ class PromoCodeController extends Controller
         return $this->redirect(['index']);
     }
 
-    // Действие для отображения списка всех промокодов
-    public function actionIndex()
+    /**
+     * Действие для отображения списка всех промокодов
+     *
+     * @return string|Response
+     */
+    public function actionIndex(): string|Response
     {
         $dataProvider = new ActiveDataProvider([
             'query' => PromoCode::find(),
@@ -68,8 +83,14 @@ class PromoCodeController extends Controller
         ]);
     }
 
-    // Действие для просмотра деталей промокода
-    public function actionView($id)
+    /**
+     * Действие для просмотра деталей промокода
+     *
+     * @param $id
+     * @return string|Response
+     * @throws NotFoundHttpException
+     */
+    public function actionView($id): string|Response
     {
         $model = $this->findModel($id);
         return $this->render('view', [
@@ -77,8 +98,13 @@ class PromoCodeController extends Controller
         ]);
     }
 
-    // Действие для создания нового промокода
-    public function actionCreate()
+    /**
+     * Действие для создания нового промокода
+     *
+     * @return string|Response
+     * @throws Exception
+     */
+    public function actionCreate(): string|Response
     {
         $model = new PromoCode();
 
@@ -91,8 +117,15 @@ class PromoCodeController extends Controller
         ]);
     }
 
-    // Действие для обновления существующего промокода
-    public function actionUpdate($id)
+    /**
+     * Действие для обновления существующего промокода
+     *
+     * @param $id
+     * @return string|Response
+     * @throws Exception
+     * @throws NotFoundHttpException
+     */
+    public function actionUpdate($id): Response|string
     {
         $model = $this->findModel($id);
 
@@ -105,15 +138,29 @@ class PromoCodeController extends Controller
         ]);
     }
 
-    // Действие для удаления промокода
-    public function actionDelete($id)
+    /**
+     * Действие для удаления промокода
+     *
+     * @param $id
+     * @return string|Response
+     * @throws NotFoundHttpException
+     * @throws Throwable
+     * @throws StaleObjectException
+     */
+    public function actionDelete($id): string|Response
     {
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
     }
 
-    // Найти модель промокода по ID
+    /**
+     * Найти модель промокода по ID
+     *
+     * @param $id
+     * @return PromoCode|null
+     * @throws NotFoundHttpException
+     */
     protected function findModel($id): ?PromoCode
     {
         if (($model = PromoCode::findOne($id)) !== null) {
@@ -123,8 +170,13 @@ class PromoCodeController extends Controller
         throw new NotFoundHttpException('Промокод не найден.');
     }
 
-    // Генерация уникального кода
-    private function generateUniqueCode($length)
+    /**
+     * Генерация уникального кода
+     *
+     * @param $length
+     * @return string
+     */
+    private function generateUniqueCode($length): string
     {
         $faker = Factory::create();
         $unique = false;

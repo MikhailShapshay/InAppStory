@@ -1,5 +1,8 @@
 <?php
 
+/* @var $this \yii\web\View */
+/* @var $model \app\models\PromoCode */
+
 use yii\helpers\Html;
 
 $this->title = 'Создать Промокод';

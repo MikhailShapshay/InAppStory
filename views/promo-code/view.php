@@ -1,5 +1,8 @@
 <?php
 
+/* @var $this \yii\web\View */
+/* @var $model \app\models\PromoCode|null */
+
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
@@ -15,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a('Удалить', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
-                'confirm' => 'Вы уверены, что хотите удалить этот элемент?',
+                'confirm' => 'Вы уверены, что хотите удалить этот промокод?',
                 'method' => 'post',
             ],
         ]) ?>

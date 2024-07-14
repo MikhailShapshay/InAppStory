@@ -1,5 +1,8 @@
 <?php
 
+/* @var $this \yii\web\View */
+/* @var $model \app\models\PromoCode|\yii\db\ActiveRecord */
+
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 

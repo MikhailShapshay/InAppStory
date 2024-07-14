@@ -1,10 +1,13 @@
 <?php
 
+/* @var $this \yii\web\View */
+/* @var $model \app\models\User|null */
+
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 $this->title = $model->username;
-$this->params['breadcrumbs'][] = ['label' => 'Users', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Пользователи', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-view">
@@ -16,11 +19,11 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     <?php endif; ?>
 	<p>
-		<?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-		<?= Html::a('Delete', ['delete', 'id' => $model->id], [
+		<?= Html::a('Редактировать', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+		<?= Html::a('Удалить', ['delete', 'id' => $model->id], [
 			'class' => 'btn btn-danger',
 			'data' => [
-				'confirm' => 'Are you sure you want to delete this item?',
+				'confirm' => 'Вы уверены, что хотите удалить этого пользователя?',
 				'method' => 'post',
 			],
 		]) ?>

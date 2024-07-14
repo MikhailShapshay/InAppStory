@@ -1,5 +1,8 @@
 <?php
 
+/* @var $this \yii\web\View */
+/* @var $model \app\models\PromoCode|null */
+
 use yii\helpers\Html;
 
 $this->title = 'Редактировать Промокод: ' . $model->id;

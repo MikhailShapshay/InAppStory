@@ -1,9 +1,12 @@
 <?php
 
+/* @var $this \yii\web\View */
+/* @var $dataProvider \yii\data\ActiveDataProvider */
+
 use yii\helpers\Html;
 use yii\grid\GridView;
 
-$this->title = 'Users';
+$this->title = 'Пользователи';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-index">
