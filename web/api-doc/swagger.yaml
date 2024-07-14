@@ -1,0 +1,90 @@
+openapi: 3.0.0
+info:
+  title: 'PromoCode API'
+  version: 1.0.0
+servers:
+  -
+    url: 'http://localhost:8282'
+paths:
+  /api/promo-code-rest: {  }
+  /api/promo-code-rest/get-api-key:
+    post:
+      tags:
+        - API-KEY
+      summary: 'Получить api_key'
+      operationId: 01bd292d19f71053de83463689e5c5e8
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                username:
+                  type: string
+                  example: admin
+                password:
+                  type: string
+                  example: admin123
+              type: object
+      responses:
+        '200':
+          description: 'Успешная авторизация'
+          content:
+            application/json:
+              schema:
+                properties:
+                  api_key: { type: string }
+                type: object
+        '401':
+          description: 'Ошибка авторизации'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string }
+                type: object
+  /api/promo-code-rest/get-promo-code:
+    get:
+      tags:
+        - PromoCode
+      summary: 'Получить промокод'
+      description: 'Возвращает доступный промокод для авторизованного пользователя'
+      operationId: 33237d142ffaa60f3c9e833443ffd8f9
+      responses:
+        '200':
+          description: 'Промокод успешно выдан'
+          content:
+            application/json:
+              schema:
+                properties:
+                  status: { type: string }
+                  message: { type: string }
+                  promo_code: { type: string }
+                type: object
+        '404':
+          description: 'Нет доступных промокодов'
+          content:
+            application/json:
+              schema:
+                properties:
+                  status: { type: string }
+                  message: { type: string }
+                type: object
+      security:
+        -
+          bearerAuth: []
+components:
+  securitySchemes:
+    API-KEY:
+      type: http
+      description: 'Введите ваш API ключ'
+      name: Authorization
+      in: header
+      scheme: bearer
+tags:
+  -
+    name: API-KEY
+    description: 'API получения ключа'
+  -
+    name: PromoCode
+    description: 'API для работы с промокодами'

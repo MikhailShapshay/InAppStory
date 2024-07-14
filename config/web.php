@@ -16,6 +16,9 @@ $config = [
     'components' => [
         'request' => [
             'cookieValidationKey' => 'z-co35jfjneurRIhZN_EsMKnAEUOtfn8',
+            'parsers' => [
+                'application/json' => 'yii\web\JsonParser',
+            ]
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
@@ -54,6 +57,7 @@ $config = [
                     'controller' => 'api/promo-code-rest',
                     'extraPatterns' => [
                         'GET get-promo-code' => 'get-promo-code',
+                        'POST get-api-key' => 'get-api-key',
                     ],
                     'pluralize' => false,
                 ],

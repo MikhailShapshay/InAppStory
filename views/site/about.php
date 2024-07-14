@@ -29,6 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <li>Сторонние пакеты:
         <ul>
             <li>"zircote/swagger-php"</li>
+            <li>"doctrine/annotations"</li>
         </ul>
         </li>
         <li>PHP: 8.2</li>
