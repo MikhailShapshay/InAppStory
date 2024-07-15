@@ -1,0 +1,14 @@
+paths:
+  tests: tests
+  log: tests/_output
+  data: tests/_data
+  helpers: tests/_support
+settings:
+  bootstrap: _bootstrap.php
+  suite_class: \PHPUnit\Framework\TestSuite
+  error_level: "E_ALL & ~E_STRICT & ~E_DEPRECATED"
+  memory_limit: 1024M
+modules:
+  config:
+    Yii2:
+      configFile: 'config/test.php'

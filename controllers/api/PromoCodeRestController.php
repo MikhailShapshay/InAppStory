@@ -21,8 +21,8 @@ use OpenApi\Annotations as OA;
  * @OA\SecurityScheme(
  *     type="http",
  *     scheme="bearer",
- *     securityScheme="API-KEY",
- *     name="Authorization",
+ *     securityScheme="bearerAuth",
+ *     name="Авторизация",
  *     in="header",
  *     description="Введите ваш API ключ"
  * )
@@ -152,6 +152,7 @@ class PromoCodeRestController extends ActiveController
         $promoCode = PromoCode::findOne(['user_id' => $user->id]);
 
         if ($promoCode === null) {
+            // инициализируем транзакцию для защиты от конкурентного доступа
             $transaction = Yii::$app->db->beginTransaction();
             try {
                 $promoCode = PromoCode::findAvailablePromoCode();

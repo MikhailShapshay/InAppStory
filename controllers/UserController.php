@@ -47,7 +47,7 @@ class UserController extends Controller
      */
     public function actionGenerateUsers(): string|Response
     {
-        $faker = Factory::create('ru_RU');
+        $faker = Factory::create('en_EN');
 
         $security = new Security();
 
@@ -58,9 +58,9 @@ class UserController extends Controller
             $users = [];
             for ($j = 0; $j < $batchSize; $j++) {
                 $users[] = [
-                    $faker->name,
+                    $faker->unique()->userName(),
                     $security->generateRandomString(),
-                    $security->generatePasswordHash('user'),
+                    Yii::$app->security->generatePasswordHash('user123'),
                     $faker->email,
                     time(),
                     time(),

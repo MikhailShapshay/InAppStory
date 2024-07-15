@@ -75,10 +75,10 @@ paths:
           bearerAuth: []
 components:
   securitySchemes:
-    API-KEY:
+    bearerAuth:
       type: http
       description: 'Введите ваш API ключ'
-      name: Authorization
+      name: Авторизация
       in: header
       scheme: bearer
 tags:

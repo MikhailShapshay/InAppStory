@@ -27,7 +27,7 @@ class m240710_091741_create_user_table extends Migration
 		$this->insert('{{%user}}', [
 			'username' => 'admin',
 			'auth_key' => Yii::$app->security->generateRandomString(),
-			'password_hash' => Yii::$app->security->generatePasswordHash('admin'),
+			'password_hash' => Yii::$app->security->generatePasswordHash('admin123'),
 			'email' => 'admin@example.com',
 			'status' => 10,
 			'created_at' => time(),
